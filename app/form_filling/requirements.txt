@@ -1,0 +1,4 @@
+gspread~=5.1.1
+pypdf2~=2.5.0
+reportlab~=3.6.11
+pycryptodome==3.0.0
