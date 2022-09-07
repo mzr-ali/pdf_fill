@@ -1,9 +1,7 @@
 import os.path
 import tempfile
 
-import PyPDF2
 from fillpdf import fillpdfs
-from reportlab.pdfgen import canvas
 
 
 def _get_tmp_filename(suffix=".pdf"):
@@ -31,6 +29,27 @@ def on_off(val):
     return "Off"
 
 
+def is_alaram_val(val):
+    if val.lower() == 'yes':
+        return 'YES_2'
+    else:
+        return 'NO_2'
+
+
+def premetive_offers_val(val):
+    if val.lower() == 'yes':
+        return 'YES_3'
+    else:
+        return 'NO_3'
+
+
+def minimum_irrevocable_val(val):
+    if val.lower() == 'yes':
+        return 'YES_4'
+    else:
+        return 'NO_4'
+
+
 class AppInstructions:
 
     def __init__(self):
@@ -48,12 +67,13 @@ class AppInstructions:
                           'Confirmed': on_off(data.get('confirmed', '')),
                           'Time Change': on_off(data.get('time_change', '')),
                           'Reminders': on_off(data.get('reminder', '')),
-                          'Appointment Duration':data.get('appointment_duration', ''),#['1 hour', '1/2 Hour', '15 minutes']
+                          'Appointment Duration': data.get('appointment_duration', ''),
+                          # ['1 hour', '1/2 Hour', '15 minutes']
                           'Min Notice Required': data.get('min_notice', '2'),
-                          'Allow Double Bookings': data.get('double_booking'.upper(), 'YES'),#['YES', 'NO']
-                          'LBX / Other Code': data.get('lbx_instruct', ''),
-                          'instructions': data.get('instructions', ''),
-                          'Is there an Alarm': data.get("is_alaram", 'YES_2'),# ['YES_2', 'NO_2']
+                          'Allow Double Bookings': data.get('double_booking', '').upper(),  # ['YES', 'NO']
+                          'LBX / Other Code': data.get('lbx_code', ''),
+                          'instructions': data.get('lbx_located', ''),
+                          'Is there an Alarm': is_alaram_val(data.get("is_alarm", '')),  # ['YES_2', 'NO_2']
                           'Alarm Code': data.get('alaram_code', ''),
                           'Turn Off Lights': on_off(data.get('turn_off_lights', '')),
                           'Remove Shoes': on_off(data.get('remove_shoes', '')),
@@ -94,33 +114,40 @@ class AppInstructions:
                           'Time Change_3': on_off(data.get('contact_2_timechange', '')),
                           'Reminders_3': on_off(data.get('contact_2_reminder', '')),
                           'Admin / Front-desk instructions': data.get('admin_instruction', ''),
-                          'Restricted Times / Days / Special instructions': data.get('Restricted Times', ''),
-                          'Other info for showing agent': data.get('Other info for showing agent', ''),
-                          'Access instructions': data.get('access_instruction', 'door code'), #['door code', 'go direct', 'key', 'sentrilock', 'lock box']
+                          # ['Email / Text listing contact(s) & wait for confirmation', 'Leave voicemail & immediatley confirm', 'Property is vacant, always confirm', 'Auto message listing contacts and confirm', 'Call listing agent for confirmation instructions', 'Do not contact listing agent. They will confirm direct.', 'Page listing agent for confirmation instructions', 'Call listing contac(s) & wait for conf']
+                          'Restricted Times / Days / Special instructions': data.get('restrict_time', ''),
+                          'Other info for showing agent': data.get('showing_agent_info', ''),
+                          'Access instructions': data.get('access_instruction', ''),
+                          # ['door code', 'go direct', 'key', 'sentrilock', 'lock box']
                           'Phone_1': data.get('contact_1_phone2', ''),
                           'MLS #': data.get('mls_number', ''),
-                          'Property_2': data.get('Property_2', ''),
-                          'Agent_2': data.get('Agent_2', ''),
-                          'At Location': data.get('At Location', ''),
-                          'Date': data.get('Date', ''),
-                          'Time': data.get('Time', ''),
-                          'Are you accepting preemptive offers': data.get('preemtive offers', 'YES_3'), # ['YES_3', 'NO_3']
-                          'To Email': data.get('To Email', ''),
-                          'Are you requesting a minimum irrevocable': data.get('minimum irrevocable', 'YES_4'),#['YES_4', 'NO_4']
-                          'To Fax': data.get('To Fax', ''),
-                          'If yes how long': data.get('how long', ''),
+                          'Property_2': data.get('property_name_2', ''),
+                          'Agent_2': data.get('agent_name_2', ''),
+                          'At Location': data.get('at_location', ''),
+                          'Date': data.get('date', ''),
+                          'Time': data.get('time', ''),
+                          'Are you accepting preemptive offers': premetive_offers_val(data.get('premetive_offers', '')),
+                          # ['YES_3', 'NO_3']
+                          'To Email': data.get('to_email', ''),
+                          'Are you requesting a minimum irrevocable': minimum_irrevocable_val(
+                              data.get('minimum_irrevocable', '')),
+                          # ['YES_4', 'NO_4']
+                          'To Fax': data.get('to_fax', ''),
+                          'If yes how long': data.get('how_long', ''),
                           'Is there any additional information you would like to include in the automated notification that goes to the showing agents when an offer is registered': data.get(
-                              'additional information', ''),
-                          'In person': data.get('In person', ''),
-                          'By Email': data.get('By Email', ''),
-                          'Fax': data.get('Fax', ''),
-                          'Other': data.get('Other', ''),
-                          'Text8': data.get('Text8', ''),
-                          'Other offer details': data.get('Other offers', ''),
-                          'Offers': data.get('Offers', ''),
-                          'Automated Offer Notifications': data.get('notification', '')} #['All agents', 'Agents with registered offers', 'Do Not Send']
+                              'additional_information', ''),
+                          'In person': on_off(data.get('in_person', '')),
+                          'By Email': on_off(data.get('by_email', '')),
+                          'Fax': on_off(data.get('by_fax', '')),
+                          'Other': on_off(data.get('other_method', '')),
+                          'Text8': data.get('other_method_text', ''),
+                          'Other offer details': data.get('other_offer_details', ''),
+                          'Offers': data.get('Offers', ''),  # ['Offers accepted anytime', 'Holding offer date']
+                          'Automated Offer Notifications': data.get('notification',
+                                                                    '')}  # ['All agents', 'Agents with registered offers', 'Do Not Send']
 
-        fillpdfs.write_fillable_pdf(self.file_path, output_pdf_path=self.output_path, data_dict=fields_to_file, flatten=True)
+        fillpdfs.write_fillable_pdf(self.file_path, output_pdf_path=self.output_path, data_dict=fields_to_file,
+                                    flatten=True)
         return self.output_path
 
     # def insert_signature(self):
@@ -140,8 +167,8 @@ class AppInstructions:
     #     page.mergePage(sig_page)
     #     return page
 
-        # sig_fodler = os.path.join(os.getcwd(), "SIGNATURES")
-        # sig_file = os.path.join(sig_fodler, f"signature.png")
-        # output_fodler = os.path.join(os.getcwd(), "fiiled_form")
-        # file_path = os.path.join(output_fodler, f"{os.path.basename(input_file).split('.')[0]}-sig.pdf")
-        # sign_pdf(input_file,3,300,130,150,70, file_path, sig_file)
+    # sig_fodler = os.path.join(os.getcwd(), "SIGNATURES")
+    # sig_file = os.path.join(sig_fodler, f"signature.png")
+    # output_fodler = os.path.join(os.getcwd(), "fiiled_form")
+    # file_path = os.path.join(output_fodler, f"{os.path.basename(input_file).split('.')[0]}-sig.pdf")
+    # sign_pdf(input_file,3,300,130,150,70, file_path, sig_file)

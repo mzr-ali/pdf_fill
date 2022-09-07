@@ -1,75 +1,39 @@
 from enum import Enum
 
-from core.models import ApplicationIModel
+from core.models import ApplicationInstruction, Form120
 from form_filling import AppInstructions
 from rest_framework import serializers
 
 
 class AppInstructionSerializer(serializers.ModelSerializer):
-    appointment_duration = serializers.ChoiceField(choices=ApplicationIModel.appt_choice)
-    double_booking = serializers.ChoiceField(choices=ApplicationIModel.double_booking_choice)
-    p_new_appt = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    p_denied = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    p_cancelled = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    p_confirmed = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    p_time_change = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    p_reminder = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    access_instruction = serializers.ChoiceField(choices=ApplicationIModel.access_choices)
-    is_alaram = serializers.ChoiceField(choices=ApplicationIModel.alaram_choice)
-    turn_off_lights = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    remove_shoes = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    leave_card = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    lock_doors = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    call_if_late = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    knock_first = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    bring_reco_lic = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    contact_1_notify_email = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    contact_1_notify_text = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    contact_1_notify_call = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    contact_1_canconfirm = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    contact_1_candenied = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    contact_1_appt = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    contact_1_denied = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    contact_1_cancelled = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    contact_1_confirmed = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    contact_1_timechange = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    contact_1_reminder = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-
-    contact_2_notify_email = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    contact_2_notify_text = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    contact_2_notify_call = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    contact_2_canconfirm = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    contact_2_candenied = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    contact_2_appt = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    contact_2_denied = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    contact_2_cancelled = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    contact_2_confirmed = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    contact_2_timechange = serializers.ChoiceField(choices=ApplicationIModel.check_box)
-    contact_2_reminder = serializers.ChoiceField(choices=ApplicationIModel.check_box)
 
     def __init__(self, *args, **kwargs):
         super(AppInstructionSerializer, self).__init__(*args, **kwargs)
-        self.app = AppInstructions()
 
     class Meta:
-        model = ApplicationIModel
+        model = ApplicationInstruction
         fields = [
+            'id',
             'mls_number',
             'property_name',
             'agent_name',
             'min_notice',
             'double_booking',
             'appointment_duration',
-            'p_new_appt',
-            'p_denied',
-            'p_cancelled',
-            'p_confirmed',
-            'p_time_change',
-            'p_reminder',
-            'instructions',
+            'admin_instruction',
+            'property_new_appointment',
+            'property_denied',
+            'property_cancelled',
+            'property_confirmed',
+            'property_time_change',
+            'property_reminder',
+            'lbx_located',
+            'lbx_code',
+            'restrict_time',
             'access_instruction',
-            'lbx_instruct',
-            'is_alaram',
+            'is_alarm',
+            'alaram_code',
+            'showing_agent_info',
             'turn_off_lights',
             'remove_shoes',
             'leave_card',
@@ -109,14 +73,75 @@ class AppInstructionSerializer(serializers.ModelSerializer):
             'contact_2_confirmed',
             'contact_2_timechange',
             'contact_2_reminder',
+            'property_name_2',
+            'agent_name_2',
+            'when_offers_accept',
+            'date',
+            'time',
+            'premetive_offers',
+            'minimum_irrevocable',
+            'how_long',
+            'notify_in_person',
+            'at_location',
+            'notify_by_email',
+            'to_email',
+            'notify_by_fax',
+            'to_fax',
+            'other_method',
+            'other_method_text',
+            'other_offer_details',
+            'notification',
+            'additional_information',
+
         ]
+        read_only_fields = ['id']
 
 
-class ReferenceEnumfield(serializers.ChoiceField):
-    def __init__(self, enum_type, **kwargs):
-        if not issubclass(enum_type, str):
-            raise TypeError
-        if not issubclass(enum_type, Enum):
-            raise TypeError("enum_type should be an Enum")
-        self.enum_name = enum_type.__name__
-        super().__init__(choices=[enum.name for enum in enum_type], **kwargs)
+class Form120Serializer(serializers.ModelSerializer):
+
+    def __init__(self, *args, **kwargs):
+        super(Form120Serializer, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Form120
+        fields = [
+            'id',
+            'buyer_one',
+            'buyer_one_street',
+            'buyer_one_phone',
+            'buyer_two',
+            'buyer_two_street',
+            'seller_one',
+            'seller_one_street',
+            'seller_one_phone',
+            'seller_two',
+            'seller_two_street',
+            'prop_offer_date',
+            'prop_street_no',
+            'prop_street',
+            'prop_unit_no',
+            'prop_city',
+            'prop_state',
+            'prop_zipcode',
+            'irrevocable_person',
+            'irrevocable_time',
+            'irrevocable_date',
+            'acceptance_time',
+            'acceptance_date',
+            'seller_phone_number',
+            'seller_lawyer_name',
+            'seller_lawyer_address',
+            'seller_lawyer_email',
+            'seller_lawyer_phone',
+            'seller_lawyer_fax',
+            'buyer_lawyer_name',
+            'buyer_lawyer_address',
+            'buyer_lawyer_email',
+            'buyer_lawyer_phone',
+            'buyer_lawyer_fax',
+
+
+        ]
+        read_only_fields = ['id']
+
+

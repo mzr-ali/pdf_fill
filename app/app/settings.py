@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'mydatabase',
+        'NAME': 'form_db',
         # 'HOST': os.environ.get('DB_HOST'),
         # 'NAME': os.environ.get('DB_NAME'),
         # 'USER': os.environ.get('DB_USER'),
@@ -127,6 +127,8 @@ MEDIA_URL = '/static/media/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'core.User'
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PARSER_CLASSES': [
@@ -135,4 +137,13 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.JSONParser',
     ]
 
+}
+SPECTACULAR_SETTINGS = {
+    'ENUM_NAME_OVERRIDES': {
+        # # variable containing list of tuples, e.g. [('US', 'US'), ('RU', 'RU'),]
+        # # dedicated Enum or models.Choices class
+        # 'CountryEnum': 'import_path.enums.Contact2TimechangeEnum)',
+        # # choices is an attribute of class CurrencyContainer containing a list of tuples
+        # 'CurrencyEnum': 'import_path.CurrencyContainer.choices',
+    }
 }

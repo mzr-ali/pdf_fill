@@ -1,4 +1,35 @@
-from django.db import models  # noqa
+from django.contrib.auth.base_user import BaseUserManager
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    PermissionsMixin
+)
+from django.db import models
+
+
+class UserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('User must have an email address.')
+        user = self.model(email=self.normalize_email(email), **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password):
+        user = self.create_user(email, password)
+        user.is_staff = True
+        user.is_superuser = True
+        user.save(using=self._db)
+        return user
+
+
+class User(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    objects = UserManager()
+    USERNAME_FIELD = 'email'
 
 
 class Form200(models.Model):
@@ -32,7 +63,7 @@ class Form200(models.Model):
     txtp_zipcode = models.CharField(max_length=200)
 
 
-class ApplicationIModel(models.Model):
+class ApplicationInstruction(models.Model):
     access_choices = [
         ('door code', 'door code'),
         ('go direct', 'go direct'),
@@ -41,10 +72,11 @@ class ApplicationIModel(models.Model):
         ('lock box', 'lock box')
     ]
     check_box = [
-        ('On', 1),
-        ('Off', 0)
+        ('1', 1),
+        ('0', 0)
     ]
-    alaram_choice = [('Yes', 'YES_2'), ('No', 'NO_2')]
+
+    alaram_choice = [('YES_2', 'Yes'), ('NO_2', 'No')]
     double_booking_choice = [('Yes', 'YES'), ('No', 'NO')]
     appt_choice = [('1 hour', '1 hour'), ('1/2 Hour', '1/2 Hour'), ('15 minutes', '15 minutes')]
     mls_number = models.CharField(max_length=255)
@@ -52,67 +84,177 @@ class ApplicationIModel(models.Model):
     agent_name = models.CharField(max_length=255)
 
     # Appointment Instructions
-    min_notice = models.SmallIntegerField()
+    min_notice = models.SmallIntegerField(default=2)
     double_booking = models.CharField(max_length=255, choices=double_booking_choice)
     appointment_duration = models.CharField(max_length=255, choices=appt_choice)
 
     # Page me regarding
-    p_new_appt = models.SmallIntegerField(choices=check_box, default=0)
-    p_denied = models.SmallIntegerField(choices=check_box, default=0)
-    p_cancelled = models.SmallIntegerField(choices=check_box, default=0)
-    p_confirmed = models.SmallIntegerField(choices=check_box, default=0)
-    p_time_change = models.SmallIntegerField(choices=check_box, default=0)
-    p_reminder = models.SmallIntegerField(choices=check_box, default=0)
+    property_new_appointment = models.BooleanField(default=1)
+    property_denied = models.BooleanField(default=1)
+    property_cancelled = models.BooleanField(default=0)
+    property_confirmed = models.BooleanField(default=0)
+    property_time_change = models.BooleanField(default=0)
+    property_reminder = models.BooleanField(default=0)
 
     # special_instrctions
-    instructions = models.TextField(max_length=500,
-                                    help_text='Are there any restricted times / days / special instructions?')
+    lbx_located = models.TextField(max_length=500,
+                                   help_text='Where is the LBX located? / Any other access instructions?')
+    restrict_time = models.TextField(max_length=500,
+                                     help_text='Are there any restricted times / days / special instructions?')
+    showing_agent_info = models.TextField(max_length=500, help_text='Other info for Showing Agent:')
+
     access_instruction = models.CharField(max_length=125, choices=access_choices, default='key')
-    lbx_instruct = models.TextField(max_length=500,
-                                    help_text='Where is the LBX located? / Any other access instructions?')
-    is_alaram = models.CharField(choices=alaram_choice, max_length=255)
+    lbx_code = models.CharField(max_length=500,
+                                help_text='')
+    is_alarm = models.CharField(choices=alaram_choice, max_length=255)
     alaram_code = models.CharField(max_length=255)
 
-    turn_off_lights = models.SmallIntegerField(choices=check_box, default=1)
-    remove_shoes = models.SmallIntegerField(choices=check_box, default=0)
-    leave_card = models.SmallIntegerField(choices=check_box, default=1)
-    lock_doors = models.SmallIntegerField(choices=check_box, default=0)
-    call_if_late = models.SmallIntegerField(choices=check_box, default=1)
-    knock_first = models.SmallIntegerField(choices=check_box, default=0)
-    bring_reco_lic = models.SmallIntegerField(choices=check_box, default=1)
+    turn_off_lights = models.BooleanField(default=1)
+    remove_shoes = models.BooleanField(default=0)
+    leave_card = models.BooleanField(default=1)
+    lock_doors = models.BooleanField(default=0)
+    call_if_late = models.BooleanField(default=1)
+    knock_first = models.BooleanField(default=0)
+    bring_reco_lic = models.BooleanField(default=1)
 
     contact_1_name = models.CharField(max_length=255)
     contact_1_areacode = models.IntegerField()
     contact_1_phone1 = models.IntegerField()
     contact_1_phone2 = models.IntegerField()
+    contact_1_notify_email = models.BooleanField(default=1)
     contact_1_email = models.EmailField()
-    contact_1_notify_email = models.SmallIntegerField(choices=check_box, default=1)
-    contact_1_notify_text = models.SmallIntegerField(choices=check_box, default=1)
-    contact_1_notify_call = models.SmallIntegerField(choices=check_box, default=1)
-    contact_1_canconfirm = models.SmallIntegerField(choices=check_box, default=1)
-    contact_1_candenied = models.SmallIntegerField(choices=check_box, default=1)
 
-    contact_1_appt = models.SmallIntegerField(choices=check_box, default=1)
-    contact_1_denied = models.SmallIntegerField(choices=check_box, default=1)
-    contact_1_cancelled= models.SmallIntegerField(choices=check_box, default=1)
-    contact_1_confirmed= models.SmallIntegerField(choices=check_box, default=1)
-    contact_1_timechange= models.SmallIntegerField(choices=check_box, default=1)
-    contact_1_reminder= models.SmallIntegerField(choices=check_box, default=1)
+    contact_1_notify_text = models.BooleanField(default=1)
+    contact_1_notify_call = models.BooleanField(default=1)
+    contact_1_canconfirm = models.BooleanField(default=1)
+    contact_1_candenied = models.BooleanField(default=1)
+
+    contact_1_appt = models.BooleanField(default=1)
+    contact_1_denied = models.BooleanField(default=1)
+    contact_1_cancelled = models.BooleanField(default=1)
+    contact_1_confirmed = models.BooleanField(default=1)
+    contact_1_timechange = models.BooleanField(default=1)
+    contact_1_reminder = models.BooleanField(default=1)
 
     contact_2_name = models.CharField(max_length=255)
     contact_2_areacode = models.IntegerField()
     contact_2_phone1 = models.IntegerField()
     contact_2_phone2 = models.IntegerField()
     contact_2_email = models.EmailField(max_length=255)
-    contact_2_notify_email = models.SmallIntegerField(choices=check_box, default=1)
-    contact_2_notify_text = models.SmallIntegerField(choices=check_box, default=1)
-    contact_2_notify_call = models.SmallIntegerField(choices=check_box, default=1)
-    contact_2_canconfirm = models.SmallIntegerField(choices=check_box, default=1)
-    contact_2_candenied = models.SmallIntegerField(choices=check_box, default=1)
+    contact_2_notify_email = models.BooleanField(default=1)
+    contact_2_notify_text = models.BooleanField(default=1)
+    contact_2_notify_call = models.BooleanField(default=1)
+    contact_2_canconfirm = models.BooleanField(default=1)
+    contact_2_candenied = models.BooleanField(default=1)
 
-    contact_2_appt = models.SmallIntegerField(choices=check_box, default=1)
-    contact_2_denied = models.SmallIntegerField(choices=check_box, default=1)
-    contact_2_cancelled = models.SmallIntegerField(choices=check_box, default=1)
-    contact_2_confirmed = models.SmallIntegerField(choices=check_box, default=1)
-    contact_2_timechange = models.SmallIntegerField(choices=check_box, default=1)
-    contact_2_reminder = models.SmallIntegerField(choices=check_box, default=1)
+    contact_2_appt = models.BooleanField(default=1)
+    contact_2_denied = models.BooleanField(default=1)
+    contact_2_cancelled = models.BooleanField(default=1)
+    contact_2_confirmed = models.BooleanField(default=1)
+    contact_2_timechange = models.BooleanField(default=1)
+    contact_2_reminder = models.BooleanField(default=1)
+
+    property_name_2 = models.CharField(max_length=255)
+    agent_name_2 = models.CharField(max_length=255)
+    date = models.CharField(max_length=255)
+    time = models.CharField(max_length=255)
+    premtive_choices = [
+        ("YES_3", "Yes"),
+        ("NO_3", "No"),
+    ]
+    minimum_irrevocable_choice = [
+        ("YES_4", "Yes"),
+        ("NO_4", "No"),
+    ]
+    admin_instruction_choices = [('Email / Text listing contact(s) & wait for confirmation',
+                                  'Email / Text listing contact(s) & wait for confirmation'),
+                                 ('Leave voicemail & immediatley confirm', 'Leave voicemail & immediatley confirm'),
+                                 ('Property is vacant, always confirm', 'Property is vacant, always confirm'),
+                                 ('Auto message listing contacts and confirm',
+                                  'Auto message listing contacts and confirm'),
+                                 ('Call listing agent for confirmation instructions',
+                                  'Call listing agent for confirmation instructions'),
+                                 ('Do not contact listing agent. They will confirm direct.',
+                                  'Do not contact listing agent. They will confirm direct.'),
+                                 ('Page listing agent for confirmation instructions',
+                                  'Page listing agent for confirmation instructions'),
+                                 ('Call listing contac(s) & wait for conf', 'Call listing contac(s) & wait for conf')]
+    admin_instruction = models.CharField(max_length=255, choices=admin_instruction_choices,
+                                         default='Email / Text listing contact(s) & wait for confirmation')
+    premetive_offers = models.CharField(max_length=255, choices=premtive_choices, default='NO_3')
+    minimum_irrevocable = models.CharField(max_length=255, choices=premtive_choices, default='NO_4')
+    how_long = models.SmallIntegerField()
+
+    notify_in_person = models.BooleanField(default=1)
+    at_location = models.CharField(max_length=255, blank=True, null=True)
+
+    notify_by_email = models.BooleanField(default=1)
+    to_email = models.EmailField(max_length=255, blank=True, null=True)
+
+    notify_by_fax = models.BooleanField(default=1)
+    to_fax = models.CharField(max_length=255, blank=True, null=True)
+
+    other_method = models.BooleanField(default=1)
+    other_method_text = models.TextField(max_length=500,
+                                         help_text='Other offer submission method', blank=True, null=True)
+    additional_information = models.TextField(max_length=500,
+                                              help_text='Is there any additional information you would like to include in the automated notification that goes to the showing agents when an offer is registered')
+
+    other_offer_details = models.TextField(max_length=500,
+                                           help_text='Other details showing agents should know?')
+    notification_choices = [('All agents', 'All agents'),
+                            ('Agents with registered offers', 'Agents with registered offers'),
+                            ('Do Not Send', 'Do Not Send')]
+    notification = models.CharField(max_length=255, choices=notification_choices, default='All agents')
+    offer_choices = [('Offers accepted anytime', 'Offers accepted anytime'),
+                     ('Holding offer date', 'Holding offer date')]
+    when_offers_accept = models.CharField(max_length=255, choices=offer_choices, default='All agents')
+
+    def __str__(self):
+        return self.property_name
+
+
+class Form120(models.Model):
+    buyer_one = models.CharField(max_length=255)
+    buyer_one_street = models.CharField(max_length=255)
+    buyer_one_phone = models.CharField(max_length=255)
+
+    buyer_two = models.CharField(max_length=255)
+    buyer_two_street = models.CharField(max_length=255)
+
+    seller_one = models.CharField(max_length=255)
+    seller_one_street = models.CharField(max_length=255)
+    seller_one_phone = models.CharField(max_length=255)
+
+    seller_two = models.CharField(max_length=255)
+    seller_two_street = models.CharField(max_length=255)
+
+    prop_offer_date = models.DateField()
+    prop_street_no = models.CharField(max_length=255)
+    prop_street = models.CharField(max_length=255)
+    prop_unit_no = models.CharField(max_length=255)
+    prop_city = models.CharField(max_length=255)
+    prop_state = models.CharField(max_length=255)
+    prop_zipcode = models.CharField(max_length=255)
+    irrevocable_person = models.CharField(max_length=255)
+    irrevocable_time = models.TimeField(max_length=255)
+    irrevocable_date = models.DateField(max_length=255)
+
+    acceptance_time = models.TimeField()
+    acceptance_date = models.DateField()
+    seller_phone_number = models.PositiveIntegerField()
+
+    seller_lawyer_name = models.CharField(max_length=255)
+    seller_lawyer_address = models.CharField(max_length=255)
+    seller_lawyer_email = models.CharField(max_length=255)
+    seller_lawyer_phone = models.CharField(max_length=255)
+    seller_lawyer_fax = models.CharField(max_length=255)
+
+    buyer_lawyer_name = models.CharField(max_length=255)
+    buyer_lawyer_address = models.CharField(max_length=255)
+    buyer_lawyer_email = models.CharField(max_length=255)
+    buyer_lawyer_phone = models.CharField(max_length=255)
+    buyer_lawyer_fax = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.seller_one
