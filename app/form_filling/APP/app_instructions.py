@@ -23,8 +23,7 @@ def day_format(d):
 
 
 def on_off(val):
-    val = val if val else "0"
-    if int(val) == 1:
+    if val:
         return 'On'
     return "Off"
 
@@ -60,64 +59,64 @@ class AppInstructions:
         fields = fillpdfs.get_form_fields(self.file_path)
         print(self.output_path)
         fields_to_file = {'Property': data.get('property_name', ''),
-                          'New  Appt': on_off(data.get('new_appt', '')),
-                          'Denied': on_off(data.get('denied', '')),
-                          'Cancelled': on_off(data.get('cancelled', '')),
+                          'New  Appt': on_off(data.get('property_new_appointment',  False)),
+                          'Denied': on_off(data.get('property_denied', '')),
+                          'Cancelled': on_off(data.get('property_cancelled',  False)),
                           'Agent': data.get('agent_name', ''),
-                          'Confirmed': on_off(data.get('confirmed', '')),
-                          'Time Change': on_off(data.get('time_change', '')),
-                          'Reminders': on_off(data.get('reminder', '')),
+                          'Confirmed': on_off(data.get('property_confirmed', False)),
+                          'Time Change': on_off(data.get('property_time_change',  False)),
+                          'Reminders': on_off(data.get('property_reminder', False)),
                           'Appointment Duration': data.get('appointment_duration', ''),
                           # ['1 hour', '1/2 Hour', '15 minutes']
                           'Min Notice Required': data.get('min_notice', '2'),
-                          'Allow Double Bookings': data.get('double_booking', '').upper(),  # ['YES', 'NO']
+                          'Allow Double Bookings': data.get('double_booking', 'NO').upper(),  # ['YES', 'NO']
                           'LBX / Other Code': data.get('lbx_code', ''),
                           'instructions': data.get('lbx_located', ''),
-                          'Is there an Alarm': is_alaram_val(data.get("is_alarm", '')),  # ['YES_2', 'NO_2']
+                          'Is there an Alarm': is_alaram_val(data.get("is_alarm", 'NO_2')),  # ['YES_2', 'NO_2']
                           'Alarm Code': data.get('alaram_code', ''),
-                          'Turn Off Lights': on_off(data.get('turn_off_lights', '')),
-                          'Remove Shoes': on_off(data.get('remove_shoes', '')),
-                          'Leave Card': on_off(data.get('leave_card', '')),
-                          'Lock Doors': on_off(data.get('lock_doors', '')),
-                          'Call if late': on_off(data.get('call_if_late', '')),
-                          'Knock First': on_off(data.get('knock_first', '')),
-                          'Bring RECO Lic': on_off(data.get('bring_reco_lic', '')),
+                          'Turn Off Lights': on_off(data.get('turn_off_lights',  False)),
+                          'Remove Shoes': on_off(data.get('remove_shoes',  False)),
+                          'Leave Card': on_off(data.get('leave_card',  False)),
+                          'Lock Doors': on_off(data.get('lock_doors',  False)),
+                          'Call if late': on_off(data.get('call_if_late',  False)),
+                          'Knock First': on_off(data.get('knock_first',  False)),
+                          'Bring RECO Lic': on_off(data.get('bring_reco_lic',  False)),
                           'Name': data.get('contact_name_1', ''),
                           'Area Code': data.get('contact_1_areacode', ''),
                           'Phone': data.get('contact_1_phone1', ''),
                           'Email': data.get('contact_1_email', ''),
-                          'Email_2': on_off(data.get('contact_1_notify_email', '')),
-                          'Text Msg': on_off(data.get('contact_1_notify_text', '')),
-                          'Must Call': on_off(data.get('contact_1_notify_call', '')),
-                          'Can Confirm': on_off(data.get('contact_1_canconfirm', '')),
-                          'Can Deny': on_off(data.get('contact_1_candenied', '')),
-                          'New  Appt_2': on_off(data.get('contact_1_appt', '')),
-                          'Denied_2': on_off(data.get('contact_1_denied', '')),
-                          'Cancelled_2': on_off(data.get('contact_1_cancelled', '')),
-                          'Confirmed_2': on_off(data.get('contact_1_confirmed', '')),
-                          'Time Change_2': on_off(data.get('contact_1_timechange', '')),
-                          'Reminders_2': on_off(data.get('contact_1_reminder', '')),
+                          'Email_2': on_off(data.get('contact_1_notify_email',  False)),
+                          'Text Msg': on_off(data.get('contact_1_notify_text',  False)),
+                          'Must Call': on_off(data.get('contact_1_notify_call',  False)),
+                          'Can Confirm': on_off(data.get('contact_1_canconfirm',  False)),
+                          'Can Deny': on_off(data.get('contact_1_candenied',  False)),
+                          'New  Appt_2': on_off(data.get('contact_1_appt',  False)),
+                          'Denied_2': on_off(data.get('contact_1_denied',  False)),
+                          'Cancelled_2': on_off(data.get('contact_1_cancelled',  False)),
+                          'Confirmed_2': on_off(data.get('contact_1_confirmed',  False)),
+                          'Time Change_2': on_off(data.get('contact_1_timechange',  False)),
+                          'Reminders_2': on_off(data.get('contact_1_reminder',  False)),
                           'Name_2': data.get('contact_2_name', ''),
                           'Phone_2': data.get('contact_2_areacode', ''),
                           'undefined_4': data.get('contact_2_phone1', ''),
                           'undefined_5': data.get('contact_2_phone2', ''),
                           'Email_3': data.get('contact_2_email', ''),
-                          'Email_4': on_off(data.get('contact_2_notify_email', '')),
-                          'Text Msg_2': on_off(data.get('contact_2_notify_text', '')),
-                          'Must Call_2': on_off(data.get('contact_2_notify_call', '')),
-                          'Can Confirm_2': on_off(data.get('contact_2_canconfirm', '')),
-                          'Can Deny_2': on_off(data.get('contact_2_candenied', '')),
-                          'New  Appt_3': on_off(data.get('contact_2_appt', '')),
-                          'Denied_3': on_off(data.get('contact_2_denied', '')),
-                          'Cancelled_3': on_off(data.get('contact_2_cancelled', '')),
-                          'Confirmed_3': on_off(data.get('contact_2_confirmed', '')),
-                          'Time Change_3': on_off(data.get('contact_2_timechange', '')),
-                          'Reminders_3': on_off(data.get('contact_2_reminder', '')),
+                          'Email_4': on_off(data.get('contact_2_notify_email',  False)),
+                          'Text Msg_2': on_off(data.get('contact_2_notify_text',  False)),
+                          'Must Call_2': on_off(data.get('contact_2_notify_call',  False)),
+                          'Can Confirm_2': on_off(data.get('contact_2_canconfirm',  False)),
+                          'Can Deny_2': on_off(data.get('contact_2_candenied',  False)),
+                          'New  Appt_3': on_off(data.get('contact_2_appt',  False)),
+                          'Denied_3': on_off(data.get('contact_2_denied',  False)),
+                          'Cancelled_3': on_off(data.get('contact_2_cancelled',  False)),
+                          'Confirmed_3': on_off(data.get('contact_2_confirmed',  False)),
+                          'Time Change_3': on_off(data.get('contact_2_timechange',  False)),
+                          'Reminders_3': on_off(data.get('contact_2_reminder',  False)),
                           'Admin / Front-desk instructions': data.get('admin_instruction', ''),
                           # ['Email / Text listing contact(s) & wait for confirmation', 'Leave voicemail & immediatley confirm', 'Property is vacant, always confirm', 'Auto message listing contacts and confirm', 'Call listing agent for confirmation instructions', 'Do not contact listing agent. They will confirm direct.', 'Page listing agent for confirmation instructions', 'Call listing contac(s) & wait for conf']
                           'Restricted Times / Days / Special instructions': data.get('restrict_time', ''),
                           'Other info for showing agent': data.get('showing_agent_info', ''),
-                          'Access instructions': data.get('access_instruction', ''),
+                          'Access instructions': data.get('access_instruction', 'door code'),
                           # ['door code', 'go direct', 'key', 'sentrilock', 'lock box']
                           'Phone_1': data.get('contact_1_phone2', ''),
                           'MLS #': data.get('mls_number', ''),
@@ -136,15 +135,15 @@ class AppInstructions:
                           'If yes how long': data.get('how_long', ''),
                           'Is there any additional information you would like to include in the automated notification that goes to the showing agents when an offer is registered': data.get(
                               'additional_information', ''),
-                          'In person': on_off(data.get('in_person', '')),
-                          'By Email': on_off(data.get('by_email', '')),
-                          'Fax': on_off(data.get('by_fax', '')),
-                          'Other': on_off(data.get('other_method', '')),
+                          'In person': on_off(data.get('in_person',  False)),
+                          'By Email': on_off(data.get('by_email',  False)),
+                          'Fax': on_off(data.get('by_fax',  False)),
+                          'Other': on_off(data.get('other_method',  False)),
                           'Text8': data.get('other_method_text', ''),
-                          'Other offer details': data.get('other_offer_details', ''),
+                          'Other offer details': data.get('other_offer_details', 'Offers accepted anytime'),
                           'Offers': data.get('Offers', ''),  # ['Offers accepted anytime', 'Holding offer date']
                           'Automated Offer Notifications': data.get('notification',
-                                                                    '')}  # ['All agents', 'Agents with registered offers', 'Do Not Send']
+                                                                    'All agents')}  # ['All agents', 'Agents with registered offers', 'Do Not Send']
 
         fillpdfs.write_fillable_pdf(self.file_path, output_pdf_path=self.output_path, data_dict=fields_to_file,
                                     flatten=True)

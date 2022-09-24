@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -64,6 +65,7 @@ class Form200(models.Model):
 
 
 class ApplicationInstruction(models.Model):
+
     access_choices = [
         ('door code', 'door code'),
         ('go direct', 'go direct'),
@@ -76,7 +78,7 @@ class ApplicationInstruction(models.Model):
         ('0', 0)
     ]
 
-    alaram_choice = [('YES_2', 'Yes'), ('NO_2', 'No')]
+    alaram_choice = [('Yes', 'YES_2'), ('No', 'NO_2')]
     double_booking_choice = [('Yes', 'YES'), ('No', 'NO')]
     appt_choice = [('1 hour', '1 hour'), ('1/2 Hour', '1/2 Hour'), ('15 minutes', '15 minutes')]
     mls_number = models.CharField(max_length=255)
@@ -89,12 +91,12 @@ class ApplicationInstruction(models.Model):
     appointment_duration = models.CharField(max_length=255, choices=appt_choice)
 
     # Page me regarding
-    property_new_appointment = models.BooleanField(default=1)
-    property_denied = models.BooleanField(default=1)
-    property_cancelled = models.BooleanField(default=0)
-    property_confirmed = models.BooleanField(default=0)
-    property_time_change = models.BooleanField(default=0)
-    property_reminder = models.BooleanField(default=0)
+    property_new_appointment = models.BooleanField(default=False)
+    property_denied = models.BooleanField(default=False)
+    property_cancelled = models.BooleanField(default=False)
+    property_confirmed = models.BooleanField(default=False)
+    property_time_change = models.BooleanField(default=False)
+    property_reminder = models.BooleanField(default=False)
 
     # special_instrctions
     lbx_located = models.TextField(max_length=500,
@@ -109,62 +111,62 @@ class ApplicationInstruction(models.Model):
     is_alarm = models.CharField(choices=alaram_choice, max_length=255)
     alaram_code = models.CharField(max_length=255)
 
-    turn_off_lights = models.BooleanField(default=1)
-    remove_shoes = models.BooleanField(default=0)
-    leave_card = models.BooleanField(default=1)
-    lock_doors = models.BooleanField(default=0)
-    call_if_late = models.BooleanField(default=1)
-    knock_first = models.BooleanField(default=0)
-    bring_reco_lic = models.BooleanField(default=1)
+    turn_off_lights = models.BooleanField(default=False)
+    remove_shoes = models.BooleanField(default=False)
+    leave_card = models.BooleanField(default=False)
+    lock_doors = models.BooleanField(default=True)
+    call_if_late = models.BooleanField(default=False)
+    knock_first = models.BooleanField(default=False)
+    bring_reco_lic = models.BooleanField(default=False)
 
     contact_1_name = models.CharField(max_length=255)
     contact_1_areacode = models.IntegerField()
     contact_1_phone1 = models.IntegerField()
     contact_1_phone2 = models.IntegerField()
-    contact_1_notify_email = models.BooleanField(default=1)
+    contact_1_notify_email = models.BooleanField(default=False)
     contact_1_email = models.EmailField()
 
-    contact_1_notify_text = models.BooleanField(default=1)
-    contact_1_notify_call = models.BooleanField(default=1)
-    contact_1_canconfirm = models.BooleanField(default=1)
-    contact_1_candenied = models.BooleanField(default=1)
+    contact_1_notify_text = models.BooleanField(default=False)
+    contact_1_notify_call = models.BooleanField(default=False)
+    contact_1_canconfirm = models.BooleanField(default=False)
+    contact_1_candenied = models.BooleanField(default=False)
 
-    contact_1_appt = models.BooleanField(default=1)
-    contact_1_denied = models.BooleanField(default=1)
-    contact_1_cancelled = models.BooleanField(default=1)
-    contact_1_confirmed = models.BooleanField(default=1)
-    contact_1_timechange = models.BooleanField(default=1)
-    contact_1_reminder = models.BooleanField(default=1)
+    contact_1_appt = models.BooleanField(default=False)
+    contact_1_denied = models.BooleanField(default=False)
+    contact_1_cancelled = models.BooleanField(default=False)
+    contact_1_confirmed = models.BooleanField(default=False)
+    contact_1_timechange = models.BooleanField(default=False)
+    contact_1_reminder = models.BooleanField(default=False)
 
     contact_2_name = models.CharField(max_length=255)
     contact_2_areacode = models.IntegerField()
     contact_2_phone1 = models.IntegerField()
     contact_2_phone2 = models.IntegerField()
     contact_2_email = models.EmailField(max_length=255)
-    contact_2_notify_email = models.BooleanField(default=1)
-    contact_2_notify_text = models.BooleanField(default=1)
-    contact_2_notify_call = models.BooleanField(default=1)
-    contact_2_canconfirm = models.BooleanField(default=1)
-    contact_2_candenied = models.BooleanField(default=1)
+    contact_2_notify_email = models.BooleanField(default=False)
+    contact_2_notify_text = models.BooleanField(default=False)
+    contact_2_notify_call = models.BooleanField(default=False)
+    contact_2_canconfirm = models.BooleanField(default=False)
+    contact_2_candenied = models.BooleanField(default=False)
 
-    contact_2_appt = models.BooleanField(default=1)
-    contact_2_denied = models.BooleanField(default=1)
-    contact_2_cancelled = models.BooleanField(default=1)
-    contact_2_confirmed = models.BooleanField(default=1)
-    contact_2_timechange = models.BooleanField(default=1)
-    contact_2_reminder = models.BooleanField(default=1)
+    contact_2_appt = models.BooleanField(default=False)
+    contact_2_denied = models.BooleanField(default=False)
+    contact_2_cancelled = models.BooleanField(default=False)
+    contact_2_confirmed = models.BooleanField(default=False)
+    contact_2_timechange = models.BooleanField(default=False)
+    contact_2_reminder = models.BooleanField(default=False)
 
     property_name_2 = models.CharField(max_length=255)
     agent_name_2 = models.CharField(max_length=255)
     date = models.CharField(max_length=255)
     time = models.CharField(max_length=255)
     premtive_choices = [
-        ("YES_3", "Yes"),
-        ("NO_3", "No"),
+        ("Yes", "YES_3"),
+        ("No", "NO_3"),
     ]
     minimum_irrevocable_choice = [
-        ("YES_4", "Yes"),
-        ("NO_4", "No"),
+        ("Yes", "YES_4"),
+        ("No", "NO_4"),
     ]
     admin_instruction_choices = [('Email / Text listing contact(s) & wait for confirmation',
                                   'Email / Text listing contact(s) & wait for confirmation'),
@@ -182,19 +184,19 @@ class ApplicationInstruction(models.Model):
     admin_instruction = models.CharField(max_length=255, choices=admin_instruction_choices,
                                          default='Email / Text listing contact(s) & wait for confirmation')
     premetive_offers = models.CharField(max_length=255, choices=premtive_choices, default='NO_3')
-    minimum_irrevocable = models.CharField(max_length=255, choices=premtive_choices, default='NO_4')
+    minimum_irrevocable = models.CharField(max_length=255, choices=minimum_irrevocable_choice, default='NO_4')
     how_long = models.SmallIntegerField()
 
-    notify_in_person = models.BooleanField(default=1)
+    notify_in_person = models.BooleanField(default=False)
     at_location = models.CharField(max_length=255, blank=True, null=True)
 
-    notify_by_email = models.BooleanField(default=1)
+    notify_by_email = models.BooleanField(default=False)
     to_email = models.EmailField(max_length=255, blank=True, null=True)
 
-    notify_by_fax = models.BooleanField(default=1)
+    notify_by_fax = models.BooleanField(default=False)
     to_fax = models.CharField(max_length=255, blank=True, null=True)
 
-    other_method = models.BooleanField(default=1)
+    other_method = models.BooleanField(default=False)
     other_method_text = models.TextField(max_length=500,
                                          help_text='Other offer submission method', blank=True, null=True)
     additional_information = models.TextField(max_length=500,
@@ -258,3 +260,12 @@ class Form120(models.Model):
 
     def __str__(self):
         return self.seller_one
+
+
+class ReceptionEmail(models.Model):
+    name = models.CharField(max_length=255, default='test user')
+    email = models.EmailField(max_length=255)
+    password = models.CharField(max_length=255, default=11111)
+
+    def __str__(self):
+        return self.email
