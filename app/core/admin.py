@@ -11,3 +11,5 @@ class UserAdmin(BaseUserAdmin):
 admin.site.register(models.ApplicationInstruction)
 admin.site.register(models.Form120)
 admin.site.register(models.ReceptionEmail)
+admin.site.register(models.ProcedureAgreement)
+admin.site.register(models.AuthorizationRequest)

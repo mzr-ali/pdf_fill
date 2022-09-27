@@ -1,7 +1,4 @@
-from enum import Enum
-
-from core.models import ApplicationInstruction, Form120
-from form_filling import AppInstructions
+from core.models import (Form810, ProcedureAgreement, Form120, ApplicationInstruction, AuthorizationRequest)
 from rest_framework import serializers
 
 
@@ -13,7 +10,6 @@ class AppInstructionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ApplicationInstruction
         fields = [
-            'id',
             'mls_number',
             'property_name',
             'agent_name',
@@ -140,8 +136,55 @@ class Form120Serializer(serializers.ModelSerializer):
             'buyer_lawyer_phone',
             'buyer_lawyer_fax',
 
-
         ]
         read_only_fields = ['id']
 
 
+class ProcedureAgreementSerializer(serializers.ModelSerializer):
+
+    def __init__(self, *args, **kwargs):
+        super(ProcedureAgreementSerializer, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = ProcedureAgreement
+        fields = [
+            'property_address',
+            'client_name',
+            'seller_1_name',
+            'seller_1_date',
+            'seller_2_name',
+            'seller_2_date',
+            'broker_name',
+            'broker_date',
+
+        ]
+
+
+class Form810Serializer(serializers.ModelSerializer):
+
+    def __init__(self, *args, **kwargs):
+        super(Form810Serializer, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Form810
+        fields = [
+            'acknowledgement',
+            'broker_1',
+            'broker_2',
+
+        ]
+
+
+class AuthRequestSerializer(serializers.ModelSerializer):
+
+    def __init__(self, *args, **kwargs):
+        super(AuthRequestSerializer, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = AuthorizationRequest
+        fields = [
+            'property_address',
+            'name',
+            'offer_until',
+
+        ]

@@ -136,7 +136,7 @@ class Form200A:
         self.writer.update_page_form_field_values(self.writer.pages[2], fields=fields_to_file)
 
     def save_file(self, name):
-        output_fodler = os.path.join(os.getcwd(), "fiiled_form")
+        output_fodler = os.path.join(os.getcwd(), "Filled_Form")
         file_path = os.path.join(output_fodler, f"{self.file_name}-{name}.pdf")
         with open(file_path, 'wb') as output_stream:
             self.writer.write(output_stream)
@@ -161,6 +161,6 @@ class Form200A:
 
         # sig_fodler = os.path.join(os.getcwd(), "SIGNATURES")
         # sig_file = os.path.join(sig_fodler, f"signature.png")
-        # output_fodler = os.path.join(os.getcwd(), "fiiled_form")
+        # output_fodler = os.path.join(os.getcwd(), "Filled_Form")
         # file_path = os.path.join(output_fodler, f"{os.path.basename(input_file).split('.')[0]}-sig.pdf")
         # sign_pdf(input_file,3,300,130,150,70, file_path, sig_file)

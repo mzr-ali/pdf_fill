@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-bo+tcyoc54wzusg6m31e1k-w-30#%4up!wit+u1*y*zsrqm*!j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ec2-18-223-109-63.us-east-2.compute.amazonaws.com']
+ALLOWED_HOSTS = ['ec2-18-223-109-63.us-east-2.compute.amazonaws.com', '127.0.0.1']
 
 # Application definition
 
@@ -108,7 +108,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Karachi'
 
 USE_I18N = True
 

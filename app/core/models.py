@@ -1,4 +1,3 @@
-from django import forms
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -65,7 +64,6 @@ class Form200(models.Model):
 
 
 class ApplicationInstruction(models.Model):
-
     access_choices = [
         ('door code', 'door code'),
         ('go direct', 'go direct'),
@@ -263,9 +261,42 @@ class Form120(models.Model):
 
 
 class ReceptionEmail(models.Model):
-    name = models.CharField(max_length=255, default='test user')
-    email = models.EmailField(max_length=255)
-    password = models.CharField(max_length=255, default=11111)
+    sender_name = models.CharField(max_length=255, default='test user')
+    sender_email = models.EmailField(max_length=255)
+    sender_password = models.CharField(max_length=255, default=11111)
+    receiver_email = models.EmailField(max_length=255)
 
     def __str__(self):
-        return self.email
+        return self.sender_email
+
+
+class ProcedureAgreement(models.Model):
+    property_address = models.CharField(max_length=255)
+    client_name = models.CharField(max_length=255)
+    seller_1_name = models.CharField(max_length=255)
+    seller_1_date = models.DateField(max_length=255)
+    seller_2_name = models.CharField(max_length=255)
+    seller_2_date = models.DateField(max_length=255)
+    broker_name = models.CharField(max_length=255)
+    broker_date = models.DateField(max_length=255)
+
+    def __str__(self):
+        return self.property_address
+
+
+class Form810(models.Model):
+    acknowledgement = models.CharField(max_length=255)
+    broker_1 = models.CharField(max_length=255)
+    broker_2 = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.acknowledgement
+
+
+class AuthorizationRequest(models.Model):
+    property_address = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    offer_until = models.DateField(max_length=255)
+
+    def __str__(self):
+        return self.property_address
