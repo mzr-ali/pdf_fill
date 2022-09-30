@@ -1,4 +1,5 @@
-from core.models import (Form810, ProcedureAgreement, Form120, ApplicationInstruction, AuthorizationRequest)
+from core.models import (Form810, ProcedureAgreement, Form120, ApplicationInstruction, AuthorizationRequest,
+                         Form248, CheckList,ExceptionList,Form244)
 from rest_framework import serializers
 
 
@@ -187,4 +188,127 @@ class AuthRequestSerializer(serializers.ModelSerializer):
             'name',
             'offer_until',
 
+        ]
+
+
+class Form248Serializer(serializers.ModelSerializer):
+
+    def __init__(self, *args, **kwargs):
+        super(Form248Serializer, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Form248
+        fields = [
+            'seller_1',
+            'seller_2',
+            'buyer_1',
+            'buyer_2',
+            'street_number',
+            'street',
+            'unit_number',
+            'city',
+            'state',
+            'zip_code',
+            'broker',
+            'purpose_1',
+            'entry_access_1',
+            'purpose_2',
+            'entry_access_2',
+            'purpose_3',
+            'entry_access_3',
+            'tenent_ack',
+            'additional_terms',
+
+        ]
+
+
+class CheckListSerializer(serializers.ModelSerializer):
+
+    def __init__(self, *args, **kwargs):
+        super(CheckListSerializer, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = CheckList
+        fields = [
+            'property_address',
+            'mls_num',
+            'ar_mls_num',
+            'already_loaded_no',
+            'already_loaded_yes',
+            'already_loaded',
+            'board_yes',
+            'board_no',
+            's_data_sheet',
+            's_listing_agreement',
+            's_working_with_realtor',
+            'mortgage_verification',
+            'fintrac',
+            'property_facts',
+            's_appt_instruc',
+            's_process_to_seller',
+            's_mls_depart',
+            's_power_of_attorney',
+            's_property_officer',
+            's_property_tenant_ack',
+            's_speak_design',
+            's_privacy_act',
+            's_auth_forms',
+            'except_listing_agreement',
+            'proceedure_agreement',
+            'l_data_sheet',
+            'l_listing_agreement',
+            'l_working_with_realtor',
+            'l_appt_instruc',
+            'l_process_to_seller',
+            'l_mls_depart',
+            'l_power_of_attorney',
+            'l_property_officer',
+            'l_property_tenant_ack',
+            'l_speak_design',
+            'l_privacy_act',
+            'l_auth_forms',
+
+        ]
+
+
+class ExceptionListSerializer(serializers.ModelSerializer):
+
+    def __init__(self, *args, **kwargs):
+        super(ExceptionListSerializer, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = ExceptionList
+        fields = [
+            'commission'
+        ]
+class Form244Serializer(serializers.ModelSerializer):
+
+    def __init__(self, *args, **kwargs):
+        super(Form244Serializer, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Form244
+        fields = [
+            'street_number',
+            'street',
+            'unit_num',
+            'city',
+            'state',
+            'zip_code',
+            'seller_1',
+            'seller_2',
+            'broker',
+            'broker_id',
+            'msl_number',
+            'interboaard_mls',
+            'board',
+            'list_date',
+            'time_limit',
+            'offer_time',
+            'present_date',
+            'other_dir',
+            'other_dir1',
+            'other_dir2',
+            'other_dir3',
+            'disclaimer',
         ]

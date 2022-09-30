@@ -300,3 +300,108 @@ class AuthorizationRequest(models.Model):
 
     def __str__(self):
         return self.property_address
+
+
+class Form248(models.Model):
+    seller_1 = models.CharField(max_length=255)
+    seller_2 = models.CharField(max_length=255)
+    buyer_1 = models.CharField(max_length=255)
+    buyer_2 = models.CharField(max_length=255)
+    street_number = models.CharField(max_length=255)
+    street = models.CharField(max_length=255)
+    unit_number = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    state = models.CharField(max_length=255)
+    zip_code = models.CharField(max_length=255)
+    broker = models.CharField(max_length=255)
+    purpose_1 = models.CharField(max_length=255)
+    entry_access_1 = models.CharField(max_length=255)
+    purpose_2 = models.CharField(max_length=255)
+    entry_access_2 = models.CharField(max_length=255)
+    purpose_3 = models.CharField(max_length=255)
+    entry_access_3 = models.CharField(max_length=255)
+    tenent_ack = models.CharField(max_length=255)
+    additional_terms = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.seller_1
+
+
+class CheckList(models.Model):
+    property_address = models.CharField(max_length=255)
+    mls_num = models.CharField(max_length=255)
+    ar_mls_num = models.CharField(max_length=255)
+    already_loaded_no = models.BooleanField(max_length=255)
+    already_loaded_yes = models.BooleanField(max_length=255)
+    board_yes = models.BooleanField(max_length=255)
+    board_no = models.BooleanField(max_length=255)
+    already_loaded = models.BooleanField(max_length=255)
+    s_data_sheet = models.BooleanField(max_length=255)
+    s_listing_agreement = models.BooleanField(max_length=255)
+    s_working_with_realtor = models.BooleanField(max_length=255)
+    mortgage_verification = models.BooleanField(max_length=255)
+    fintrac = models.BooleanField(max_length=255)
+    property_facts = models.BooleanField(max_length=255)
+    s_appt_instruc = models.BooleanField(max_length=255)
+    s_process_to_seller = models.BooleanField(max_length=255)
+    s_mls_depart = models.BooleanField(max_length=255)
+    s_power_of_attorney = models.BooleanField(max_length=255)
+    s_property_officer = models.BooleanField(max_length=255)
+    s_property_tenant_ack = models.BooleanField(max_length=255)
+    s_speak_design = models.BooleanField(max_length=255)
+    s_privacy_act = models.BooleanField(max_length=255)
+    s_auth_forms = models.BooleanField(max_length=255)
+    except_listing_agreement = models.BooleanField(max_length=255)
+    proceedure_agreement = models.BooleanField(max_length=255)
+    l_data_sheet = models.BooleanField(max_length=255)
+    l_listing_agreement = models.BooleanField(max_length=255)
+    l_working_with_realtor = models.BooleanField(max_length=255)
+    l_appt_instruc = models.BooleanField(max_length=255)
+    l_process_to_seller = models.BooleanField(max_length=255)
+    l_mls_depart = models.BooleanField(max_length=255)
+    l_power_of_attorney = models.BooleanField(max_length=255)
+    l_property_officer = models.BooleanField(max_length=255)
+    l_property_tenant_ack = models.BooleanField(max_length=255)
+    l_speak_design = models.BooleanField(max_length=255)
+    l_privacy_act = models.BooleanField(max_length=255)
+    l_auth_forms = models.BooleanField(max_length=255)
+
+    def __str__(self):
+        return self.mls_num
+
+
+class ExceptionList(models.Model):
+    commission = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.commission
+
+
+class Form244(models.Model):
+    street_number = models.CharField(max_length=255)
+    street = models.CharField(max_length=255)
+    unit_num = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    state = models.CharField(max_length=255)
+    zip_code = models.CharField(max_length=255)
+    seller_1 = models.CharField(max_length=255)
+    seller_2 = models.CharField(max_length=255)
+    broker = models.CharField(max_length=255)
+    broker_id = models.CharField(max_length=255)
+    msl_number = models.CharField(max_length=255)
+    interboaard_mls = models.CharField(max_length=255)
+    board = models.CharField(max_length=255)
+    list_date = models.DateField(max_length=255)
+    time_limit = models.CharField(max_length=255)
+    offer_time = models.TimeField(max_length=255)
+    present_date = models.DateField(max_length=255)
+    other_dir = models.CharField(max_length=255)
+    other_dir1 = models.CharField(max_length=255)
+    other_dir2 = models.CharField(max_length=255)
+    other_dir3 = models.CharField(max_length=255)
+    disclaimer = models.CharField(max_length=255)
+    seller1_sig = models.CharField(max_length=255)
+    seller2_sig = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.msl_number

@@ -57,7 +57,6 @@ class AppInstructions:
 
     def read_write_first_page(self, data):
         fields = fillpdfs.get_form_fields(self.file_path)
-        print(self.output_path)
         fields_to_file = {'Property': data.get('property_name', ''),
                           'New  Appt': on_off(data.get('property_new_appointment',  False)),
                           'Denied': on_off(data.get('property_denied', '')),

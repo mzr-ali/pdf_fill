@@ -66,15 +66,11 @@ def get_write_page(file_path, page_number):
         writer.write(output_stream)
 
 
-class Form244:
+class Form244Form:
 
     def __init__(self):
-        input_folder = os.path.join(os.getcwd(), 'PDFs')
-        ouput_folder = os.path.join(os.getcwd(), 'Filled_Form')
-        self.input_file_path = os.path.join(input_folder,
-                                            'residential_sale.pdf')
-        self.output_file_path = os.path.join(ouput_folder,
-                                             'form244.pdf')
+        self.input_file_path = os.path.join('static/PDFs', 'residential_sale.pdf')
+        self.output_file_path = os.path.join('media', 'form_244.pdf')
         self.reader = PdfFileReader(Path(self.input_file_path).open(mode='rb'), strict=False)
         self.writer = PdfWriter()
 
@@ -82,18 +78,19 @@ class Form244:
         # fields = fillpdf.fillpdfs.get_form_fields(self.input_file_path, page_number=13)
         # fields = self.reader.get_fields()
         # print(fields)
-        present_date = data.get('present_date', "2022/10/02")
-        present_date = datetime.strptime(present_date, "%Y/%m/%d").strftime("%y-%b-%d").split("-")
+        self.writer.add_page(self.reader.getPage(12))
+        present_date = data.get('present_date', "2022-10-02")
+        present_date = datetime.strptime(present_date, "%Y-%m-%d").strftime("%y-%b-%d").split("-")
         content = {
-            'txtp_streetnum': data.get('p_street_num', ''),
-            'txtp_street': data.get('p_street'),
-            'txtp_UnitNumber':  data.get('p_unit_num'),
-            'txtp_city':  data.get('p_city'),
-            'txtp_state':  data.get('p_state'),
-            'txtp_zipcode': data.get('p_zip'),
-            'txtseller1':  data.get('seller1'),
+            'txtp_streetnum': data.get('street_num', ''),
+            'txtp_street': data.get('street'),
+            'txtp_UnitNumber':  data.get('unit_num'),
+            'txtp_city':  data.get('city'),
+            'txtp_state':  data.get('state'),
+            'txtp_zipcode': data.get('zip_code'),
+            'txtseller1':  data.get('seller_1'),
             'hidsand':  data.get('hidsand'),
-            'txtseller2': data.get('seller2'),
+            'txtseller2': data.get('seller_2'),
             'txtl_broker':  data.get('broker'),
             'txtmlsnumber':  data.get('msl_number'),
             'txtl_brokerid':  data.get('broker_id'),
@@ -115,7 +112,6 @@ class Form244:
             'DISCLAIMER': data.get('disclaimer',"")
         }
 
-        self.writer.add_page(self.reader.getPage(12))
         self.writer.updatePageFormFieldValues(self.writer.getPage(0), content)
 
         set_need_appearances(self.writer, bool_val=True)

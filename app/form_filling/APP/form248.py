@@ -68,37 +68,33 @@ def get_write_page(file_path, page_number):
 class Form248:
 
     def __init__(self):
-        input_folder = os.path.join(os.getcwd(), 'PDFs')
-        ouput_folder = os.path.join(os.getcwd(), 'Filled_Form')
-        self.input_file_path = os.path.join(input_folder,
-                                            'residential_sale.pdf')
-        self.output_file_path = os.path.join(ouput_folder,
-                                             'form248.pdf')
+        self.input_file_path = os.path.join('static/PDFs', 'residential_sale.pdf')
+        self.output_file_path = os.path.join('media', 'form248  .pdf')
         self.reader = PdfFileReader(Path(self.input_file_path).open(mode='rb'), strict=False)
         self.writer = make_writer_from_reader(self.reader, editable=False)
 
     def write_to_file(self, data):
         # fields = fillpdf.fillpdfs.get_form_fields(self.input_file_path, page_number=17)
         content = {
-            "txtseller1": data.get('seller1'),
+            "txtseller1": data.get('seller_1'),
             "hidsand": '',
-            "txtseller2": data.get('seller2'),
-            "txtbuyer1": data.get('buyer1'),
+            "txtseller2": data.get('seller_2'),
+            "txtbuyer1": data.get('buyer_1'),
             "hidband": "",
-            "txtbuyer2": data.get('buyer2'),
-            "txtp_streetnum": data.get('prop_street_no'),
-            "txtp_street": data.get('prop_street'),
-            "txtp_unitNumber": data.get('prop_unit_num'),
-            "txtp_city": data.get('prop_city'),
-            "txtp_state": data.get('prop_state'),
-            "txtp_zipcode": data.get('prop_zip'),
-            "txtl_broker": data.get('prop_broker'),
-            "txtFpurpose": data.get('purpose'),
-            "txtEntryAccess": data.get('entry_access'),
-            "txtFpurpose2": data.get('purpose2'),
-            "txtEntryAccess2": data.get('entry_access2'),
-            "txtFpurpose3": data.get('purpose3'),
-            "txtEntryAccess3": data.get('entry_access3'),
+            "txtbuyer2": data.get('buyer_2'),
+            "txtp_streetnum": data.get('street_number'),
+            "txtp_street": data.get('street'),
+            "txtp_unitNumber": data.get('unit_number'),
+            "txtp_city": data.get('city'),
+            "txtp_state": data.get('state'),
+            "txtp_zipcode": data.get('zip_code'),
+            "txtl_broker": data.get('broker'),
+            "txtFpurpose": data.get('purpose_1'),
+            "txtEntryAccess": data.get('entry_access_1'),
+            "txtFpurpose2": data.get('purpose_2'),
+            "txtEntryAccess2": data.get('entry_access_2'),
+            "txtFpurpose3": data.get('purpose_3'),
+            "txtEntryAccess3": data.get('entry_access_3'),
             "txtAProp": data.get('tenent_ack', ''),
             "txtadditnlterms": data.get('addition_terms'),
             "txtbuyersig1":data.get('buyer_sig'),

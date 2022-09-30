@@ -1,7 +1,6 @@
 import os.path
 import tempfile
 
-import PyPDF2
 from PyPDF2 import PdfWriter, PdfReader
 from reportlab.pdfgen import canvas
 

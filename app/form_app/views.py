@@ -6,14 +6,27 @@ from email.header import Header
 from email.message import EmailMessage
 from email.utils import formataddr
 
-from core.models import Form810, ProcedureAgreement, Form120, ApplicationInstruction, ReceptionEmail, AuthorizationRequest
+from core.models import (Form810, ProcedureAgreement, Form120, ApplicationInstruction, ReceptionEmail,
+                         AuthorizationRequest, Form248, CheckList, ExceptionList, Form244)
 from django.http import HttpResponse
 from form_app.serializer import (Form810Serializer, ProcedureAgreementSerializer, Form120Serializer,
-                                 AppInstructionSerializer, AuthRequestSerializer)
-from form_filling import FormEightOneZero, ProcedureAgreementForm, AppInstructions,AuthorizationRequestForm
+                                 AppInstructionSerializer, AuthRequestSerializer, Form248Serializer,
+                                 CheckListSerializer,
+                                 ExceptionListSerializer,
+                                 Form244Serializer)
+from form_filling import (
+    FormEightOneZero,
+    ProcedureAgreementForm,
+    AppInstructions,
+    AuthorizationRequestForm,
+    FormFortyEight,
+    CheckListForm,
+    ExceptionListAgreement,
+    Form244Form
+
+)
 from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
-
 
 
 def send_email(file_data, file_name):
@@ -49,8 +62,6 @@ class AppInstructView(ModelViewSet):
         output_path = self.app.read_write_first_page(request.data)
         file_pointer = open(output_path, 'rb').read()
         send_email(file_pointer, os.path.basename(output_path))
-        # response = FileResponse(file_pointer, content_type='application/pdf')
-        # response['Content-Disposition'] = 'attachment; filename=App_instructions.pdf'
         return HttpResponse('', status=status.HTTP_200_OK)
 
 
@@ -66,8 +77,6 @@ class Form120View(ModelViewSet):
         output_path = self.app.read_write_first_page(request.data)
         file_pointer = open(output_path, 'rb').read()
         send_email(file_pointer, os.path.basename(output_path))
-        # response = FileResponse(file_pointer, content_type='application/pdf')
-        # response['Content-Disposition'] = 'attachment; filename=App_instructions.pdf'
         return HttpResponse('', status=status.HTTP_200_OK)
 
 
@@ -80,12 +89,9 @@ class ProcedureAgreementView(ModelViewSet):
     queryset = ProcedureAgreement.objects.all()
 
     def create(self, request, *args, **kwargs):
-        print(request.data)
         output_path = self.app.write_to_file(request.data)
         file_pointer = open(output_path, 'rb').read()
         send_email(file_pointer, os.path.basename(output_path))
-        # response = FileResponse(file_pointer, content_type='application/pdf')
-        # response['Content-Disposition'] = 'attachment; filename=App_instructions.pdf'
         return HttpResponse('', status=status.HTTP_200_OK)
 
 
@@ -101,8 +107,6 @@ class Form810View(ModelViewSet):
         output_path = self.app.write_to_file(request.data)
         file_pointer = open(output_path, 'rb').read()
         send_email(file_pointer, os.path.basename(output_path))
-        # response = FileResponse(file_pointer, content_type='application/pdf')
-        # response['Content-Disposition'] = 'attachment; filename=App_instructions.pdf'
         return HttpResponse('', status=status.HTTP_200_OK)
 
 
@@ -116,9 +120,66 @@ class AuthRequestView(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         output_path = self.app.write_to_file(request.data)
-        print(request.data)
         file_pointer = open(output_path, 'rb').read()
-        # send_email(file_pointer, os.path.basename(output_path))
-        # response = FileResponse(file_pointer, content_type='application/pdf')
-        # response['Content-Disposition'] = 'attachment; filename=App_instructions.pdf'
+        send_email(file_pointer, os.path.basename(output_path))
+        return HttpResponse('', status=status.HTTP_200_OK)
+
+
+class Form248View(ModelViewSet):
+    def __init__(self, *args, **kwargs):
+        super(Form248View, self).__init__(*args, **kwargs)
+        self.app = FormFortyEight()
+
+    serializer_class = Form248Serializer
+    queryset = Form248.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        output_path = self.app.write_to_file(request.data)
+        file_pointer = open(output_path, 'rb').read()
+        send_email(file_pointer, os.path.basename(output_path))
+        return HttpResponse('', status=status.HTTP_200_OK)
+
+
+class CheckListView(ModelViewSet):
+    def __init__(self, *args, **kwargs):
+        super(CheckListView, self).__init__(*args, **kwargs)
+        self.app = CheckListForm()
+
+    serializer_class = CheckListSerializer
+    queryset = CheckList.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        output_path = self.app.write_to_file(request.data)
+        file_pointer = open(output_path, 'rb').read()
+        send_email(file_pointer, os.path.basename(output_path))
+        return HttpResponse('', status=status.HTTP_200_OK)
+
+
+class ExceptionListView(ModelViewSet):
+    def __init__(self, *args, **kwargs):
+        super(ExceptionListView, self).__init__(*args, **kwargs)
+        self.app = ExceptionListAgreement()
+
+    serializer_class = ExceptionListSerializer
+    queryset = ExceptionList.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        output_path = self.app.write_to_file(request.data)
+        file_pointer = open(output_path, 'rb').read()
+        send_email(file_pointer, os.path.basename(output_path))
+        return HttpResponse('', status=status.HTTP_200_OK)
+
+
+class Form244View(ModelViewSet):
+    def __init__(self, *args, **kwargs):
+        super(Form244View, self).__init__(*args, **kwargs)
+        self.app = Form244Form()
+
+    serializer_class = Form244Serializer
+    queryset = Form244.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        output_path = self.app.write_to_file(request.data)
+        file_pointer = open(output_path, 'rb').read()
+        send_email(file_pointer, os.path.basename(output_path))
         return HttpResponse('', status=status.HTTP_200_OK)

@@ -1,14 +1,9 @@
 import os.path
 import tempfile
-import time
-from pathlib import Path
 
 import PyPDF2
-import fillpdf
-from PyPDF2 import PdfFileReader, PdfFileWriter
 from PyPDF2 import PdfWriter, PdfReader
 from PyPDF2.generic import BooleanObject, NameObject, IndirectObject
-from PyPDF2_Fields import PdfFieldType, update_page_fields, make_writer_from_reader, set_need_appearances
 from fillpdf import fillpdfs
 from reportlab.pdfgen import canvas
 
@@ -16,26 +11,6 @@ from reportlab.pdfgen import canvas
 def _get_tmp_filename(suffix=".pdf"):
     with tempfile.NamedTemporaryFile(suffix=".pdf") as fh:
         return fh.name
-
-
-def field_type_to_str(field_type):
-    if field_type == PdfFieldType.NONE:
-        return "none"
-
-    elif field_type == PdfFieldType.OTHER:
-        return "other"
-
-    elif field_type == PdfFieldType.ACTION_BTN:
-        return "action btn"
-
-    elif field_type == PdfFieldType.CHECKBOX:
-        return "checkbox"
-
-    elif field_type == PdfFieldType.RADIO_BTN_GROUP:
-        return "radio btn group"
-
-    elif field_type == PdfFieldType.TEXT_FIELD:
-        return "text"
 
 
 def day_format(d):
@@ -98,7 +73,6 @@ class AuthorizationRequestForm:
     def __init__(self):
         self.input_file_path = os.path.join('static/PDFs', 'residential_sale.pdf')
         self.output_file_path = os.path.join('media', 'authorization_request_form.pdf')
-
 
     def write_to_file(self, data):
         # fields = fillpdf.fillpdfs.get_form_fields(self.input_file_path)

@@ -65,64 +65,59 @@ def get_write_page(file_path, page_number):
         writer.write(output_stream)
 
 
-class CheckList:
+class CheckListForm:
 
     def __init__(self):
-        input_folder = os.path.join(os.getcwd(), 'PDFs')
-        ouput_folder = os.path.join(os.getcwd(), 'Filled_Form')
-        self.input_file_path = os.path.join(input_folder,
-                                            'residential_sale.pdf')
-        self.output_file_path = os.path.join(ouput_folder,
-                                             'check_list.pdf')
+        self.input_file_path = os.path.join('static/PDFs', 'residential_sale.pdf')
+        self.output_file_path = os.path.join('media', 'check_list.pdf')
         self.reader = PdfFileReader(Path(self.input_file_path).open(mode='rb'), strict=False)
-        self.writer = make_writer_from_reader(self.reader, editable=False)
+        self.writer = PdfWriter()
 
     def write_to_file(self, data):
-        content = {
-            'Property Address': 'property',
-            'undefined': data.get('mls_num', '323223'),
-            'undefined_2': data.get('ar_mls_num', ''),
-        }
-        mls_check_list = {
+        self.writer.add_page(self.reader.getPage(0))
 
+        mls_check_list = {
+            'Property Address': data.get('property_address', ''),
+            'undefined': data.get('mls_num', ''),
+            'undefined_2': data.get('ar_mls_num', ''),
             # has listing already been loaded?
-            'Check Box1': data.get('already_loaded_no', 0),  # will it need to be loaded on another board ["Yes"]
-            'Check Box2': data.get('already_loaded_yes', None),
+            'Check Box1': 0 if data.get('already_loaded_no', False) else None,
+            'Check Box2': 0 if data.get('already_loaded_yes', False) else None,
 
             # will need  another board
-            'Check Box4': data.get('board_yes', 0),
-            'Check Box3': data.get('board_no', None),
-            'Check Box5': data.get('already_loaded', 0),
+            'Check Box4': 0 if data.get('board_yes', False) else None,
+            'Check Box3': 0 if data.get('board_no', False) else None,
+            'Check Box5': 0 if data.get('already_loaded', False) else None,
 
-            'Check Box6': data.get('s_data_sheet', 0),
-            'Check Box7': data.get('s_listing_agreement', 0),
-            'Check Box8': data.get('s_working_with_realtor', 0),
-            'Check Box9': data.get('mortgage_verification', 0),
-            'Check Box10': data.get('fintrac', 0),
-            'Check Box11': data.get('property_facts', 0),
-            'Check Box12': data.get('s_appt_instruc', 0),
-            'Check Box13': data.get('s_process_to_seller', 0),
-            'Check Box14': data.get('s_mls_depart', 0),
-            'Check Box15': data.get('s_power_of_attorney', 0),
-            'Check Box16': data.get('s_property_officer', 0),
-            'Check Box17': data.get('s_property_tenant_ack', 0),
-            'Check Box18': data.get('s_speak_design', 0),
-            'Check Box19': data.get('s_privacy_act', 0),
-            'Check Box20': data.get('s_auth_forms', 0),
-            'Check Box21': data.get('except_listing_agreement', 0),
-            'Check Box22': data.get('proceedure_agreement', 0),
-            'Check Box23': data.get('l_data_sheet', 0),
-            'Check Box24': data.get('l_listing_agreement', 0),
-            'Check Box25': data.get('l_working_with_realtor', 0),
-            'Check Box26': data.get('l_appt_instruc', 0),
-            'Check Box27': data.get('l_process_to_seller', 0),
-            'Check Box28': data.get('l_mls_depart', 0),
-            'Check Box29': data.get('l_power_of_attorney', 0),
-            'Check Box30': data.get('l_property_officer', 0),
-            'Check Box31': data.get('l_property_tenant_ack', 0),
-            'Check Box32': data.get('l_speak_design', 0),
-            'Check Box33': data.get('l_privacy_act', 0),
-            'Check Box34': data.get('l_auth_forms', 0),
+            'Check Box6': 0 if data.get('s_data_sheet', False) else None,
+            'Check Box7': 0 if data.get('s_listing_agreement', False) else None,
+            'Check Box8': 0 if data.get('s_working_with_realtor', False) else None,
+            'Check Box9': 0 if data.get('mortgage_verification', False) else None,
+            'Check Box10': 0 if data.get('fintrac', False) else None,
+            'Check Box11': 0 if data.get('property_facts', False) else None,
+            'Check Box12': 0 if data.get('s_appt_instruc', False) else None,
+            'Check Box13': 0 if data.get('s_process_to_seller', False) else None,
+            'Check Box14': 0 if data.get('s_mls_depart', False) else None,
+            'Check Box15': 0 if data.get('s_power_of_attorney', False) else None,
+            'Check Box16': 0 if data.get('s_property_officer', False) else None,
+            'Check Box17': 0 if data.get('s_property_tenant_ack', False) else None,
+            'Check Box18': 0 if data.get('s_speak_design', False) else None,
+            'Check Box19': 0 if data.get('s_privacy_act', False) else None,
+            'Check Box20': 0 if data.get('s_auth_forms', False) else None,
+            'Check Box21': 0 if data.get('except_listing_agreement', False) else None,
+            'Check Box22': 0 if data.get('proceedure_agreement', False) else None,
+            'Check Box23': 0 if data.get('l_data_sheet', False) else None,
+            'Check Box24': 0 if data.get('l_listing_agreement', False) else None,
+            'Check Box25': 0 if data.get('l_working_with_realtor', False) else None,
+            'Check Box26': 0 if data.get('l_appt_instruc', False) else None,
+            'Check Box27': 0 if data.get('l_process_to_seller', False) else None,
+            'Check Box28': 0 if data.get('l_mls_depart', False) else None,
+            'Check Box29': 0 if data.get('l_power_of_attorney', False) else None,
+            'Check Box30': 0 if data.get('l_property_officer', False) else None,
+            'Check Box31': 0 if data.get('l_property_tenant_ack', False) else None,
+            'Check Box32': 0 if data.get('l_speak_design', False) else None,
+            'Check Box33': 0 if data.get('l_privacy_act', False) else None,
+            'Check Box34': 0 if data.get('l_auth_forms', False) else None,
 
         }
 
@@ -134,14 +129,13 @@ class CheckList:
                 radio_list.append(RadioBtnGroup(k, '/Yes'))
 
         # for index, page in enumerate(reader_pages):
-        self.writer.updatePageFormFieldValues(self.writer.getPage(0), content)
-
+        # self.writer.update_page_form_field_values(self.writer.getPage(0), content)
         update_page_fields(self.writer.getPage(0), mls_check_list, *radio_list)
 
-        set_need_appearances(self.writer, bool_val=True)
+        set_need_appearances(self.writer, bool_val=False)
         with open(self.output_file_path, 'wb') as output_stream:
             self.writer.write(output_stream)
-        get_write_page(self.output_file_path, 0)
+        # get_write_page(self.output_file_path, 0)
 
     def insert_signature(self):
         page = self.reader.pages[2]

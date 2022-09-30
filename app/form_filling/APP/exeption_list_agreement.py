@@ -68,19 +68,16 @@ def get_write_page(file_path, page_number):
 class ExceptionListAgreement:
 
     def __init__(self):
-        input_folder = os.path.join(os.getcwd(), 'PDFs')
-        ouput_folder = os.path.join(os.getcwd(), 'Filled_Form')
-        self.input_file_path = os.path.join(input_folder,
-                                            'residential_sale.pdf')
-        self.output_file_path = os.path.join(ouput_folder,
-                                             'exception_list_agreement.pdf')
+        self.input_file_path = os.path.join('static/PDFs', 'residential_sale.pdf')
+        self.output_file_path = os.path.join('media', 'exception_list_agreement.pdf')
         self.reader = PdfFileReader(Path(self.input_file_path).open(mode='rb'), strict=False)
-        self.writer = make_writer_from_reader(self.reader, editable=False)
+        self.writer = PdfWriter()
 
     def write_to_file(self, data):
         # fields = fillpdf.fillpdfs.get_form_fields(self.input_file_path, page_number=15)
         # fields = self.reader.get_fields()
         # print(fields)
+        self.writer.add_page(self.reader.getPage(14))
         content = {'Commission %': data.get('commission', '2')}
 
         self.writer.updatePageFormFieldValues(self.writer.getPage(14), content)
@@ -88,7 +85,6 @@ class ExceptionListAgreement:
         set_need_appearances(self.writer, bool_val=True)
         with open(self.output_file_path, 'wb') as output_stream:
             self.writer.write(output_stream)
-        get_write_page(self.output_file_path, 14)
 
     def insert_signature(self):
         page = self.reader.pages[2]

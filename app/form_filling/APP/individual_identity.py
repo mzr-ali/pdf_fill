@@ -186,16 +186,16 @@ class IndividualIdentity:
         self.writer.add_page(self.reader.getPage(5))
         self.writer.add_page(self.reader.getPage(6))
         # set_need_appearances(self.writer, bool_val=True)
-        #
-        # update_page_fields(self.writer.getPage(0), content, *radio_list)
-        # update_page_fields(self.writer.getPage(1), content, *radio_list)
-        # update_page_fields(self.writer.getPage(2), content, *radio_list)
-        # update_page_fields(self.writer.getPage(3), content, *radio_list)
-        #
-        self.writer.updatePageFormFieldValues(self.writer.getPage(0), content)
-        self.writer.updatePageFormFieldValues(self.writer.getPage(1), content)
-        self.writer.updatePageFormFieldValues(self.writer.getPage(2), content)
-        self.writer.updatePageFormFieldValues(self.writer.getPage(3), content)
+
+        update_page_fields(self.writer.getPage(0), content, *radio_list)
+        update_page_fields(self.writer.getPage(1), content, *radio_list)
+        update_page_fields(self.writer.getPage(2), content, *radio_list)
+        update_page_fields(self.writer.getPage(3), content, *radio_list)
+
+        # self.writer.updatePageFormFieldValues(self.writer.getPage(0), content)
+        # self.writer.updatePageFormFieldValues(self.writer.getPage(1), content)
+        # self.writer.updatePageFormFieldValues(self.writer.getPage(2), content)
+        # self.writer.updatePageFormFieldValues(self.writer.getPage(3), content)
 
         with open(self.output_file_path, 'wb') as output_stream:
             self.writer.write(output_stream)
